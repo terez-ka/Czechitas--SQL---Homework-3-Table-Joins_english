@@ -1,0 +1,30 @@
+--Homework Assignment:
+
+--1. When were the most units sold, and which product was it?
+SELECT SUM (UNITS) AS pocet_prodanych_kusu, product, calendarid AS datum
+FROM SQL1.Sales s
+INNER JOIN SQL1.Products p
+ON s.productid = p.productid
+Group by product, calendarid
+Order by pocet_prodanych_kusu desc
+FETCH FIRST 1 ROWS ONLY;
+
+--2. What were the revenues in each state? We are only interested in cities starting with 'Bos'.
+SELECT ROUND ((SUM (s.revenue)),1) AS trzba_celkem, c.state AS stát
+FROM SQL1.Sales s
+INNER JOIN SQL1.Cities c
+ON s.zip = c.zip 
+WHERE c.city LIKE ('Bos%') and s.revenue is not null
+GROUP BY stát
+ORDER BY trzba_celkem desc;
+
+
+--3. How many products do manufacturers have in the Mix category? Include also those manufacturers who don't produce anything in this category.
+SELECT m.manufacturer AS výrobce, count(distinct p.productid) AS pocet_produktu
+FROM SQL1.MANUFACTURERS m
+LEFT JOIN SQL1.Products p
+ON m.manufacturerid = p.manufacturerid
+AND category = 'Mix'
+Group by  m.manufacturer;
+
+
